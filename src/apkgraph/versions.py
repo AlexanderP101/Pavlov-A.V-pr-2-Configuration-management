@@ -4,7 +4,7 @@ import re
 
 SUFFIXES = dict(alpha=-4, beta=-3, pre=-2, rc=-1,
                 cvs=0, svn=1, git=2, hg=3, p=4)
-END = 4
+END = 5
 VERSION = re.compile(
     r'[0-9]+(?:\.[0-9]+)*(?:[a-z][0-9]*)?'
     r'(?:_(?:alpha|beta|pre|rc|cvs|svn|git|hg|p)[0-9]*)*'
@@ -24,18 +24,18 @@ def tokens(version):
             if number.startswith('.0'):
                 digits = number[1:]
                 zeros = len(digits) - len(digits.lstrip('0'))
-                count = min(zeros, len(digits) - 1)
+                count = max(zeros - 1, 0)
                 result.append((0, -count))
                 result.append((0, int(digits[count:])))
             else:
-                kind = 0 if not result or number.startswith('.') else 2
+                kind = 3 if result and result[-1][0] == 2 else 0
                 result.append((kind, int(number.lstrip('.'))))
         elif letter:
             result.append((1, ord(letter)))
         elif suffix:
             result.append((2, SUFFIXES[suffix]))
         else:
-            result.append((3, int(revision[2:])))
+            result.append((4, int(revision[2:])))
     return result
 
 

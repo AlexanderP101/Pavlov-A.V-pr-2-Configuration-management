@@ -6,6 +6,8 @@ import re
 import tomllib
 from urllib.parse import urlparse
 
+from .versions import tokens
+
 
 @dataclass(frozen=True)
 class Config:
@@ -59,3 +61,7 @@ def validate_fields(data):
         raise ValueError('package: недопустимое имя пакета')
     if re.fullmatch(r'[0-9][A-Za-z0-9._+-]*', data['version']) is None:
         raise ValueError('version: недопустимая версия')
+    try:
+        tokens(data['version'])
+    except ValueError as error:
+        raise ValueError(f'version: {error}') from error

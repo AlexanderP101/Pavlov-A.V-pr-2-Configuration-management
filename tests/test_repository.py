@@ -51,3 +51,6 @@ class RepositoryTests(unittest.TestCase):
         self.assertTrue(satisfies('1.2.3-r0', '~', '1.2'))
         self.assertFalse(satisfies('1.20-r0', '~', '1.2'))
         self.assertEqual(compare('1.0', '1.0'), 0)
+        self.assertLess(compare('1.0', '1.01'), 0)
+        self.assertLess(compare('1.001', '1.01'), 0)
+        self.assertGreater(compare('1_alpha1', '1_alpha_alpha'), 0)
