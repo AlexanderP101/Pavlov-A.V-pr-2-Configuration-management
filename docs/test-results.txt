@@ -47,10 +47,18 @@ test_unversioned_virtual (test_repository.RepositoryTests.test_unversioned_virtu
 Неверсионированный provides не удовлетворяет версии. ... ok
 test_version_comparison (test_repository.RepositoryTests.test_version_comparison)
 Суффиксы APK, ревизии и числа сравниваются не лексикографически. ... ok
+test_binary_and_archive (test_rules.RuleTests.test_binary_and_archive)
+Расширение архива и бинарное содержимое обнаруживаются. ... ok
+test_complexity (test_rules.RuleTests.test_complexity)
+Учитывать условия и отдельные булевы ветви. ... ok
+test_docstrings_and_names (test_rules.RuleTests.test_docstrings_and_names)
+Обнаруживать неверное имя и отсутствие docstring. ... ok
+test_magic_number (test_rules.RuleTests.test_magic_number)
+Число в сравнении запрещено; индекс элемента числом допустим. ... ok
 
 ----------------------------------------------------------------------
-Ran 24 tests in 2.096s
+Ran 28 tests in 2.073s
 
 OK
 python3 scripts/check_style.py
-Оформление: длины строк/файлов/функций, аргументы, docstring — OK
+С1–С6, Г1–Г5, Р1/Р2/Р6, Ф1, А1, К1, Ц1, М1, И1 — OK

@@ -15,6 +15,8 @@ from apkgraph.graph import build_graph, dependency_order
 from apkgraph.repository import parse_index
 from apkgraph.versions import compare
 
+DOT_RETURN_CODES = (0, 1)
+
 
 def run_apk(base, arguments):
     """Запустить внешнюю проверку и вернуть текст и код завершения."""
@@ -31,7 +33,7 @@ def compare_package(repository, base, name):
                 for b in children}
     result = run_apk(base, ['dot', name])
     actual = set(re.findall(r'"([^"\n]+)" -> "([^"\n]+)"', result.stdout))
-    if expected != actual or result.returncode not in (0, 1):
+    if expected != actual or result.returncode not in DOT_RETURN_CODES:
         raise ValueError(f'{name}: рёбра отличаются\n{result.stderr}')
     plan = run_apk(base, ['add', '--simulate', '--initdb', name])
     if plan.returncode:

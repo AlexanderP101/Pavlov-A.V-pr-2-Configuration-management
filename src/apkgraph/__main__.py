@@ -9,24 +9,30 @@ from .graph import build_graph, dependency_order, truncated_nodes
 from .plantuml import to_plantuml
 from .repository import load_repository
 
+STAGE_CONFIG = 1
+STAGE_DIRECT = 2
+STAGE_GRAPH = 3
+STAGE_ORDER = 4
+STAGE_PLANTUML = 5
+
 
 def execute(config, stage):
     """Выполнить выбранный этап; по умолчанию вывести PlantUML."""
-    if stage == 1:
+    if stage == STAGE_CONFIG:
         for key, value in config.items():
             print(f'{key}={value}')
         return
     repository = load_repository(config)
     root = repository.root(config.package, config.version)
-    if stage == 2:
+    if stage == STAGE_DIRECT:
         for dependency in root.dependencies:
             print(dependency)
         return
     graph = build_graph(repository, root, config.max_depth)
-    if stage == 3:
+    if stage == STAGE_GRAPH:
         for node, children in graph.edges.items():
             print(f'{node}: {", ".join(children)}')
-    elif stage == 4:
+    elif stage == STAGE_ORDER:
         if truncated_nodes(graph, config.max_depth):
             print('Внимание: порядок только для усечённого графа',
                   file=sys.stderr)

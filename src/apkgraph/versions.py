@@ -4,7 +4,13 @@ import re
 
 SUFFIXES = dict(alpha=-4, beta=-3, pre=-2, rc=-1,
                 cvs=0, svn=1, git=2, hg=3, p=4)
+NUMBER = 0
+LETTER = 1
+SUFFIX = 2
+SUFFIX_NUMBER = 3
+REVISION = 4
 END = 5
+ZERO = 0
 VERSION = re.compile(
     r'[0-9]+(?:\.[0-9]+)*(?:[a-z][0-9]*)?'
     r'(?:_(?:alpha|beta|pre|rc|cvs|svn|git|hg|p)[0-9]*)*'
@@ -25,17 +31,18 @@ def tokens(version):
                 digits = number[1:]
                 zeros = len(digits) - len(digits.lstrip('0'))
                 count = max(zeros - 1, 0)
-                result.append((0, -count))
-                result.append((0, int(digits[count:])))
+                result.append((NUMBER, -count))
+                result.append((NUMBER, int(digits[count:])))
             else:
-                kind = 3 if result and result[-1][0] == 2 else 0
+                kind = (SUFFIX_NUMBER if result and result[-1][0] == SUFFIX
+                        else NUMBER)
                 result.append((kind, int(number.lstrip('.'))))
         elif letter:
-            result.append((1, ord(letter)))
+            result.append((LETTER, ord(letter)))
         elif suffix:
-            result.append((2, SUFFIXES[suffix]))
+            result.append((SUFFIX, SUFFIXES[suffix]))
         else:
-            result.append((4, int(revision[2:])))
+            result.append((REVISION, int(revision[2:])))
     return result
 
 
@@ -47,15 +54,9 @@ def compare(left, right, fuzzy=False):
         b = second[index] if index < len(second) else (END, 0)
         if a == b:
             continue
-        if a[0] == b[0]:
-            return (a[1] > b[1]) - (a[1] < b[1])
         if fuzzy and index >= len(second):
             return 0
-        if a[0] == 2 and a[1] < 0:
-            return -1
-        if b[0] == 2 and b[1] < 0:
-            return 1
-        return (a[0] < b[0]) - (a[0] > b[0])
+        return compare_tokens(a, b)
     return 0
 
 
@@ -67,3 +68,14 @@ def satisfies(actual, operator, expected):
     accepted = {'=': {0}, '~': {0}, '<': {-1}, '>': {1},
                 '<=': {-1, 0}, '>=': {0, 1}}
     return relation in accepted[operator]
+
+
+def compare_tokens(a, b):
+    """Сравнить два различающихся компонента с учётом pre-release."""
+    if a[0] == b[0]:
+        return (a[1] > b[1]) - (a[1] < b[1])
+    if a[0] == SUFFIX and a[1] < ZERO:
+        return -1
+    if b[0] == SUFFIX and b[1] < ZERO:
+        return 1
+    return (a[0] < b[0]) - (a[0] > b[0])

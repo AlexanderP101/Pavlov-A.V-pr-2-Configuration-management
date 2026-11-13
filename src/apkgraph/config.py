@@ -8,6 +8,8 @@ from urllib.parse import urlparse
 
 from .versions import tokens
 
+MIN_DEPTH = 0
+
 
 @dataclass(frozen=True)
 class Config:
@@ -54,8 +56,13 @@ def validate_fields(data):
             raise ValueError(f'{key}: ожидается непустая строка')
     if type(data['test_mode']) is not bool:
         raise ValueError('test_mode: ожидается true или false')
-    if type(data['max_depth']) is not int or data['max_depth'] < 0:
+    if type(data['max_depth']) is not int or data['max_depth'] < MIN_DEPTH:
         raise ValueError('max_depth: ожидается целое число >= 0')
+    validate_package_version(data)
+
+
+def validate_package_version(data):
+    """Проверить имя и APK-версию независимо от типов полей."""
     pattern = r'[A-Z]+' if data['test_mode'] else r'[a-z0-9][a-z0-9+_.-]*'
     if re.fullmatch(pattern, data['package']) is None:
         raise ValueError('package: недопустимое имя пакета')

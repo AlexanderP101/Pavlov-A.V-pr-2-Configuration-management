@@ -3,6 +3,9 @@
 import ast
 from pathlib import Path
 
+from code_rules import inspect_tree
+from repository_rules import inspect_repository
+
 MAX_LINE = 80
 MAX_FILE = 1000
 MAX_FUNCTION = 40
@@ -35,12 +38,13 @@ def inspect_file(path):
             errors.append(f'{location}: больше {MAX_ARGUMENTS} аргументов')
         if ast.get_docstring(node) is None:
             errors.append(f'{location}: отсутствует docstring')
+    errors.extend(f'{path}:{error}' for error in inspect_tree(tree))
     return errors
 
 
 def main():
     """Завершить проверку ненулевым кодом при нарушениях."""
-    errors = []
+    errors = inspect_repository(ROOT)
     for directory in ('src', 'tests', 'scripts'):
         for path in sorted((ROOT / directory).rglob('*.py')):
             errors.extend(inspect_file(path))
@@ -48,7 +52,7 @@ def main():
         print(error)
     if errors:
         return 1
-    print('Оформление: длины строк/файлов/функций, аргументы, docstring — OK')
+    print('С1–С6, Г1–Г5, Р1/Р2/Р6, Ф1, А1, К1, Ц1, М1, И1 — OK')
     return 0
 
 

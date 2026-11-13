@@ -9,3 +9,10 @@ dist/
 .idea/
 .vscode/
 .DS_Store
+*.zip
+*.tar
+*.gz
+*.apk
+*.jar
+*.svg
+*.png
