@@ -60,3 +60,37 @@ class GraphTests(unittest.TestCase):
         packages.append(Package(str(size), '1'))
         graph = build_graph(Repository(packages), packages[0], size)
         self.assertEqual(len(graph.nodes), size + 1)
+
+
+class OrderTests(unittest.TestCase):
+    """Порядок зависит от частичного порядка, а не от случайного алфавита."""
+
+    def test_diamond(self):
+        """Каждая зависимость должна появляться раньше потребителя."""
+        from apkgraph.graph import dependency_order
+        repo = repository({'A': ['B', 'C'], 'B': ['D'], 'C': ['D'], 'D': []})
+        graph = build_graph(repo, repo.root('A', '1'), 10)
+        order = dependency_order(graph)
+        self.assertEqual(order, ['D@1', 'B@1', 'C@1', 'A@1'])
+        positions = {node: index for index, node in enumerate(order)}
+        for node, children in graph.edges.items():
+            for child in children:
+                self.assertLess(positions[child], positions[node])
+
+    def test_cycle(self):
+        """На цикле нельзя заявлять существование топологического порядка."""
+        from apkgraph.graph import dependency_order
+        repo = repository({'A': ['B'], 'B': ['A']})
+        graph = build_graph(repo, repo.root('A', '1'), 10)
+        with self.assertRaisesRegex(ValueError, 'Цикл'):
+            dependency_order(graph)
+
+    def test_partial_and_isolated(self):
+        """Нулевой предел и отдельный пакет поддерживаются."""
+        from apkgraph.graph import dependency_order, truncated_nodes
+        repo = repository({'A': ['B'], 'B': []})
+        graph = build_graph(repo, repo.root('A', '1'), 0)
+        self.assertEqual(dependency_order(graph), ['A@1'])
+        self.assertEqual(truncated_nodes(graph, 0), ['A@1'])
+        graph = build_graph(repo, repo.root('B', '1'), 10)
+        self.assertEqual(dependency_order(graph), ['B@1'])

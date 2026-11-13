@@ -42,3 +42,33 @@ def build_graph(repository, root, max_depth):
             pending.append(child)
     graph.conflicts = tuple(conflicts)
     return graph
+
+
+def dependency_order(graph):
+    """Получить порядок «зависимости раньше потребителей» без рекурсии."""
+    remaining = {node: len(children)
+                 for node, children in graph.edges.items()}
+    parents = {node: [] for node in graph.nodes}
+    for node, children in graph.edges.items():
+        for child in children:
+            parents[child].append(node)
+    ready = deque(node for node, count in remaining.items() if count == 0)
+    result = []
+    while ready:
+        node = ready.popleft()
+        result.append(node)
+        for parent in parents[node]:
+            remaining[parent] -= 1
+            if remaining[parent] == 0:
+                ready.append(parent)
+    if len(result) != len(graph.nodes):
+        blocked = ', '.join(node for node, count in remaining.items() if count)
+        raise ValueError(f'Цикл: порядок загрузки невозможен для {blocked}')
+    return result
+
+
+def truncated_nodes(graph, max_depth):
+    """Найти граничные вершины с нераскрытыми положительными связями."""
+    return [node for node, package in graph.nodes.items()
+            if graph.depths[node] == max_depth
+            and any(not dep.startswith('!') for dep in package.dependencies)]
