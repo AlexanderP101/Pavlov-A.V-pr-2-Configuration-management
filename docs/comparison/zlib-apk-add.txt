@@ -1,3 +1,0 @@
-(1/2) Installing musl (1.2.5-r13)
-(2/2) Installing zlib (1.4-r0)
-OK: 0 MiB in 2 packages

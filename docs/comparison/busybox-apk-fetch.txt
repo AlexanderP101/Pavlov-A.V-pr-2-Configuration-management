@@ -1,2 +1,0 @@
-/workspace/work/apk-repo/x86_64/busybox-1.37.0-r20.apk
-/workspace/work/apk-repo/x86_64/musl-1.2.5-r13.apk
