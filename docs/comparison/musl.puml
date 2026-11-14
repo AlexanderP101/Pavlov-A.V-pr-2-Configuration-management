@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+title Alpine APK dependency graph
+skinparam shadowing false
+component "musl@1.2.5-r13" as n0
+legend right
+  Root depth = 0; max depth = 10
+  Arrow: package -> dependency
+endlegend
+@enduml
