@@ -1,0 +1,62 @@
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 -m unittest discover -s tests -v
+test_all_stages (test_cli.CliTests.test_all_stages)
+Все пять режимов работают на одном репозитории. ... ok
+test_cycle_visualized_but_not_ordered (test_cli.CliTests.test_cycle_visualized_but_not_ordered)
+Цикл отображается, но топологический порядок отвергается. ... ok
+test_isolated_and_partial (test_cli.CliTests.test_isolated_and_partial)
+Изолированная вершина не теряется; глубина ограничивает граф. ... ok
+test_missing_config (test_cli.CliTests.test_missing_config)
+Ошибка пути читаема и не сопровождается traceback. ... ok
+test_invalid_values (test_config.ConfigTests.test_invalid_values)
+Каждое поле отклоняет неверные типы и значения. ... ok
+test_relative_path (test_config.ConfigTests.test_relative_path)
+Путь не зависит от текущего рабочего каталога. ... ok
+test_schema_and_url (test_config.ConfigTests.test_schema_and_url)
+Проверить схему, URL, существование файла и TOML-синтаксис. ... ok
+test_bfs_shortest_depth (test_graph.GraphTests.test_bfs_shortest_depth)
+Узел, найденный несколькими путями, разворачивается один раз. ... ok
+test_conflict_is_not_edge (test_graph.GraphTests.test_conflict_is_not_edge)
+Отрицательная зависимость фиксируется отдельно. ... ok
+test_cycle_and_self_loop (test_graph.GraphTests.test_cycle_and_self_loop)
+Цикл и петля сохраняются; бесконечного обхода нет. ... ok
+test_long_chain (test_graph.GraphTests.test_long_chain)
+Длинная цепочка подтверждает отсутствие рекурсии. ... ok
+test_missing_dependency (test_graph.GraphTests.test_missing_dependency)
+Отсутствующая вершина внутри глубины — явная ошибка. ... ok
+test_zero_depth (test_graph.GraphTests.test_zero_depth)
+При нулевой глубине не требуется разрешать даже прямые связи. ... ok
+test_cycle (test_graph.OrderTests.test_cycle)
+На цикле нельзя заявлять существование топологического порядка. ... ok
+test_diamond (test_graph.OrderTests.test_diamond)
+Каждая зависимость должна появляться раньше потребителя. ... ok
+test_partial_and_isolated (test_graph.OrderTests.test_partial_and_isolated)
+Нулевой предел и отдельный пакет поддерживаются. ... ok
+test_bad_tar_and_missing_index (test_remote.RemoteTests.test_bad_tar_and_missing_index)
+Повреждённый архив и архив без APKINDEX диагностируются. ... ok
+test_not_found (test_remote.RemoteTests.test_not_found)
+HTTP 404 не замалчивается. ... ok
+test_repository_and_exact_url (test_remote.RemoteTests.test_repository_and_exact_url)
+Поддерживаются URL каталога и полный URL архива. ... ok
+test_invalid_index (test_repository.RepositoryTests.test_invalid_index)
+Повреждённый индекс явно отвергается. ... ok
+test_parse_and_virtual (test_repository.RepositoryTests.test_parse_and_virtual)
+Двоеточие в so: не разрушает разбор строк APKINDEX. ... ok
+test_select_version (test_repository.RepositoryTests.test_select_version)
+Ограничение версии не заменяется выбором просто последней. ... ok
+test_unversioned_virtual (test_repository.RepositoryTests.test_unversioned_virtual)
+Неверсионированный provides не удовлетворяет версии. ... ok
+test_version_comparison (test_repository.RepositoryTests.test_version_comparison)
+Суффиксы APK, ревизии и числа сравниваются не лексикографически. ... ok
+test_binary_and_archive (test_rules.RuleTests.test_binary_and_archive)
+Расширение архива и бинарное содержимое обнаруживаются. ... ok
+test_complexity (test_rules.RuleTests.test_complexity)
+Учитывать условия и отдельные булевы ветви. ... ok
+test_docstrings_and_names (test_rules.RuleTests.test_docstrings_and_names)
+Обнаруживать неверное имя и отсутствие docstring. ... ok
+test_magic_number (test_rules.RuleTests.test_magic_number)
+Число в сравнении запрещено; индекс элемента числом допустим. ... ok
+
+----------------------------------------------------------------------
+Ran 28 tests in 2.022s
+
+OK
