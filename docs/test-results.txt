@@ -1,4 +1,4 @@
-PYTHONPATH=src python3 -m unittest discover -s tests -v
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src python3 -m unittest discover -s tests -v
 test_all_stages (test_cli.CliTests.test_all_stages)
 Все пять режимов работают на одном репозитории. ... ok
 test_cycle_visualized_but_not_ordered (test_cli.CliTests.test_cycle_visualized_but_not_ordered)
@@ -57,8 +57,6 @@ test_magic_number (test_rules.RuleTests.test_magic_number)
 Число в сравнении запрещено; индекс элемента числом допустим. ... ok
 
 ----------------------------------------------------------------------
-Ran 28 tests in 2.073s
+Ran 28 tests in 2.022s
 
 OK
-python3 scripts/check_style.py
-С1–С6, Г1–Г5, Р1/Р2/Р6, Ф1, А1, К1, Ц1, М1, И1 — OK

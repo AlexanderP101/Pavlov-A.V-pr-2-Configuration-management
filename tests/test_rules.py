@@ -34,6 +34,10 @@ class RuleTests(unittest.TestCase):
         messages = inspect_tree(ast.parse(source))
         self.assertTrue(any('К1' in message for message in messages))
         self.assertTrue(any('И1' in message for message in messages))
+        for name in ('setUp', 'tearDown'):
+            source = f'def {name}(self):\n    pass\n'
+            messages = inspect_tree(ast.parse(source))
+            self.assertTrue(any('И1' in message for message in messages))
 
     def test_binary_and_archive(self):
         """Расширение архива и бинарное содержимое обнаруживаются."""

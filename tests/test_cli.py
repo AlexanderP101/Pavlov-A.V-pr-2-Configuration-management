@@ -15,7 +15,7 @@ class CliTests(unittest.TestCase):
     def run_cli(self, example, stage):
         """Запустить модуль с конфигурацией из examples."""
         return subprocess.run(
-            [sys.executable, '-m', 'apkgraph',
+            [sys.executable, '-B', '-m', 'apkgraph',
              str(ROOT / 'examples' / example),
              '--stage', str(stage)], text=True, capture_output=True,
             check=False, env=dict(os.environ, PYTHONPATH=str(ROOT / 'src')))

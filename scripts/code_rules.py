@@ -7,7 +7,6 @@ MAX_COMPLEXITY = 10
 SNAKE_CASE = re.compile(r'_|_?[a-z][a-z0-9_]*|__[a-z][a-z0-9_]*__')
 CLASS_NAME = re.compile(r'_?[A-Z][A-Za-z0-9]*')
 CONSTANT_NAME = re.compile(r'[A-Z][A-Z0-9_]*')
-OVERRIDES = {'setUp', 'tearDown'}
 
 
 def complexity(function):
@@ -47,8 +46,7 @@ def invalid_name(node):
     if isinstance(node, ast.ClassDef):
         return not CLASS_NAME.fullmatch(node.name)
     if isinstance(node, functions):
-        return (node.name not in OVERRIDES
-                and not SNAKE_CASE.fullmatch(node.name))
+        return not SNAKE_CASE.fullmatch(node.name)
     if isinstance(node, ast.arg):
         return not SNAKE_CASE.fullmatch(node.arg)
     if isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store):

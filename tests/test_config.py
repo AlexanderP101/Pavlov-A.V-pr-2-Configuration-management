@@ -10,9 +10,9 @@ from apkgraph.config import load_config, validate_fields
 class ConfigTests(unittest.TestCase):
     """Строгая схема и полезные ошибки."""
 
-    def setUp(self):
+    def config_data(self):
         """Создать корректный набор параметров."""
-        self.data = dict(package='A', repository='graph.json', test_mode=True,
+        return dict(package='A', repository='graph.json', test_mode=True,
                          version='1.0-r0', max_depth=3)
 
     def test_invalid_values(self):
@@ -23,7 +23,7 @@ class ConfigTests(unittest.TestCase):
         for key, value in cases:
             with self.subTest(key=key, value=value):
                 with self.assertRaisesRegex(ValueError, key):
-                    validate_fields(dict(self.data, **{key: value}))
+                    validate_fields(dict(self.config_data(), **{key: value}))
 
     def test_relative_path(self):
         """Путь не зависит от текущего рабочего каталога."""
