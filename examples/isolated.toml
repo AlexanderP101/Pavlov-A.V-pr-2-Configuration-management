@@ -1,0 +1,5 @@
+package = "A"
+repository = "isolated.json"
+test_mode = true
+version = "1.0-r0"
+max_depth = 10
